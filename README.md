@@ -4,6 +4,8 @@
 
 Spyglass is a real-time ship tracker that plots maritime traffic on a dark, interactive world map. Point, click, and know what's sailing where -- no captain's license required.
 
+![Spyglass tracking 21,000+ vessels worldwide](screenshot.png)
+
 ## What it does
 
 - **Watch ships move in real-time.** Vessels appear as color-coded dots on a dark world map. Cargo ships glow green, tankers blue, passenger liners orange, and so on. They update their positions as new AIS signals come in.

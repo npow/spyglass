@@ -65,7 +65,7 @@ export function useAISStream(apiKey: string | null) {
               sog: pos.Sog,
               cog: pos.Cog,
               heading: pos.TrueHeading,
-              navStatus: (pos as Record<string, unknown>).NavigationalStatus as number ?? pos.NavigationStatus,
+              navStatus: ((pos as unknown as { NavigationalStatus?: number }).NavigationalStatus) ?? pos.NavigationStatus,
               lastUpdate: Date.now(),
             });
           }

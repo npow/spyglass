@@ -20,6 +20,38 @@ export interface Ship {
   lastUpdate: number;
 }
 
+export type FuelType = 'HFO' | 'MDO' | 'LNG';
+
+export interface EmissionEstimate {
+  mmsi: number;
+  fuelType: FuelType;
+  estimatedMainPowerKw: number;
+  estimatedAuxPowerKw: number;
+  loadFactor: number;
+  co2TonnesPerHour: number;
+  confidence: number;
+  assumptions: string[];
+}
+
+export interface PortZone {
+  code: string;
+  name: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+  radiusKm: number;
+}
+
+export interface VesselSpec {
+  imo: number;
+  fuelType: FuelType;
+  designSpeedKnots: number;
+  mainEngineKw: number;
+  auxEngineKw: number;
+  source: string;
+  updatedAt: string;
+}
+
 export type ShipCategory =
   | 'cargo'
   | 'tanker'

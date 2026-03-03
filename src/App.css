@@ -131,6 +131,173 @@ body {
   max-width: 420px;
 }
 
+.emissions-card {
+  background: var(--bg-panel);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  width: 420px;
+  max-width: calc(100vw - 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emissions-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.emissions-card-header h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.emissions-card-header p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.emissions-card-header select {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  max-width: 200px;
+}
+
+.emissions-card > select {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  width: 100%;
+}
+
+.open-port-btn {
+  background: var(--bg-panel);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  align-self: flex-start;
+  cursor: pointer;
+}
+
+.open-port-btn:hover {
+  background: rgba(148, 163, 184, 0.08);
+  color: var(--text-primary);
+}
+
+.panel-close-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.panel-close-btn:hover {
+  background: rgba(148, 163, 184, 0.08);
+  color: var(--text-primary);
+}
+
+.emissions-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.emissions-summary-grid > div {
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.emissions-summary-grid .label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.emissions-summary-grid .value {
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.emitter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.emitter-item {
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: rgba(148, 163, 184, 0.03);
+}
+
+.emitter-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.emitter-meta {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.emitter-empty {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.info-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1;
+  margin-left: 5px;
+  cursor: help;
+  user-select: none;
+}
+
 .legend-item {
   display: flex;
   align-items: center;
@@ -335,6 +502,13 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
+.detail-item .value.assumptions {
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
 .detail-item .value.dim {
   color: var(--text-secondary);
 }
@@ -496,3 +670,25 @@ body {
   background: rgba(148, 163, 184, 0.3);
 }
 
+@media (max-width: 900px) {
+  .hud {
+    top: 10px;
+    left: 10px;
+    gap: 8px;
+  }
+
+  .stats-bar {
+    gap: 10px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .legend {
+    gap: 6px 10px;
+    padding: 9px 10px;
+  }
+
+  .emissions-card {
+    width: min(420px, calc(100vw - 20px));
+  }
+}

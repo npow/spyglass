@@ -1,63 +1,66 @@
 # Spyglass
 
-**See every vessel on the seven seas, from your browser.**
+Spyglass gives port and regulatory teams a clear, vessel-level view of maritime emissions.
 
-Spyglass is a real-time ship tracker that plots maritime traffic on a dark, interactive world map. Point, click, and know what's sailing where -- no captain's license required.
+Use it to answer three operational questions fast:
+- Which ships are likely emitting the most right now?
+- Where are they concentrated (by port zone)?
+- How reliable is each estimate?
 
-![Spyglass tracking 21,000+ vessels worldwide](screenshot.png)
+![Spyglass live AIS map overview](screenshot.png)
+![Spyglass live port oversight panel](screenshot-port-oversight.png)
 
-## What it does
+## Why teams use it
 
-- **Watch ships move in real-time.** Vessels appear as color-coded dots on a dark world map. Cargo ships glow green, tankers blue, passenger liners orange, and so on. They update their positions as new AIS signals come in.
+Shipping emissions data is often delayed, inconsistent, or self-reported. Spyglass provides an independent, real-time estimate layer on top of vessel movement data so teams can:
 
-- **Click any vessel to inspect it.** A detail panel slides open with everything the ship is broadcasting: name, flag, MMSI, speed, heading, destination, ETA, draught, and dimensions. It's the manifest at a glance.
+- Prioritize inspections and enforcement based on impact.
+- Focus incentives where they reduce the most emissions.
+- Explain decisions with transparent assumptions instead of black-box outputs.
+- Communicate trends with a map-first, public-facing view.
 
-- **Works immediately in demo mode.** On first launch, Spyglass charts ~300 simulated vessels along real shipping lanes (English Channel, Strait of Malacca, Suez, Panama, and more). No account needed to explore.
+## What you can do in the app
 
-- **Plug in a free API key for live data.** Hit "Switch to Live Data", paste your [AISStream.io](https://aisstream.io) API key, and watch real ships appear from the worldwide AIS network. The key is stored locally and remembered across sessions.
+- **Track vessels globally in real time.**
+  See active traffic as color-coded vessel categories on an interactive world map.
 
-- **Clusters keep things tidy.** When zoomed out, nearby ships collapse into numbered clusters. Click a cluster to zoom in and see individual vessels.
+- **Open Port Oversight when needed.**
+  View in-zone vessel count, estimated total `CO2/hour`, and a ranked top-emitter list for the selected port zone.
 
-## Getting underway
+- **Drill into any vessel.**
+  Inspect identity and voyage details plus estimated `CO2/hour`, confidence, fuel assumption, load factor, and power assumptions.
+
+- **Triage with confidence-aware ranking.**
+  Priority scoring highlights vessels with both high estimated impact and higher uncertainty, so teams can allocate analyst time effectively.
+
+## How Emissions Are Estimated
+
+Spyglass combines vessel movement + vessel characteristics to estimate hourly CO2 emissions.
+
+1. Reads vessel speed, status, and position updates.
+2. Uses vessel specs when available; otherwise applies class defaults.
+3. Estimates engine load from speed and operating state.
+4. Converts estimated energy use into `tonnes CO2/hour` using fuel factors.
+5. Assigns a confidence score based on data freshness and completeness.
+
+Confidence is a **data-quality signal**, not a legal certainty score.
+
+## Getting started
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). That's it -- you're on the bridge.
+Open [http://localhost:5173](http://localhost:5173).
 
-## Live data
+## Live mode
 
-The demo mode runs without any setup. For real AIS data:
+Demo mode works immediately.
 
-1. Sign up at [aisstream.io](https://aisstream.io) (free tier)
-2. Copy your API key
-3. Click **Switch to Live Data** in the app and paste it in
+For live AIS traffic:
+1. Create an API key at [aisstream.io](https://aisstream.io).
+2. Click **Switch to Live Data** in the app.
+3. Paste your key.
 
-The app subscribes to the full global bounding box. Ships accumulate as their transponder signals arrive via WebSocket.
-
-## Ship type legend
-
-| Color | Type |
-|-------|------|
-| Green | Cargo |
-| Blue | Tanker |
-| Orange | Passenger |
-| Yellow | Fishing |
-| Red | Military |
-| Purple | Tug / Pilot |
-| Cyan | Sailing / Pleasure |
-| Pink | High Speed Craft |
-| Gray | Other |
-
-## Built with
-
-- [React](https://react.dev) + TypeScript + [Vite](https://vite.dev)
-- [MapLibre GL JS](https://maplibre.org) via [react-map-gl](https://visgl.github.io/react-map-gl/)
-- [CARTO](https://carto.com) dark basemap tiles
-- [AISStream.io](https://aisstream.io) WebSocket API for live AIS data
-
-## Fair winds
-
-Built for anyone who's ever stared at the ocean and wondered what all those ships are up to.
+The key is stored locally in your browser.

@@ -1,4 +1,4 @@
-import type { Ship } from '../types';
+import type { EmissionEstimate, Ship } from '../types';
 import {
   getShipCategory,
   SHIP_COLORS,
@@ -13,10 +13,11 @@ import {
 
 interface ShipPanelProps {
   ship: Ship | null;
+  emission: EmissionEstimate | null;
   onClose: () => void;
 }
 
-export function ShipPanel({ ship, onClose }: ShipPanelProps) {
+export function ShipPanel({ ship, emission, onClose }: ShipPanelProps) {
   const isOpen = ship !== null;
   const category = ship ? getShipCategory(ship.shipType) : 'other';
   const color = SHIP_COLORS[category];
@@ -134,6 +135,63 @@ export function ShipPanel({ ship, onClose }: ShipPanelProps) {
                     <span className="label">Last Update</span>
                     <span className="value" style={{ fontSize: 11 }}>
                       {new Date(ship.lastUpdate).toLocaleTimeString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Emissions */}
+              <div className="detail-section">
+                <h3>Emissions Estimate</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <span className="label">CO2 per hour</span>
+                    <span className="info-hint" title="Estimated tonnes of CO2 emitted by this vessel per hour using current AIS speed/status and vessel specs/assumptions.">
+                      i
+                    </span>
+                    <span className="value">
+                      {emission ? `${emission.co2TonnesPerHour.toFixed(2)} t` : <span className="dim">N/A</span>}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Confidence</span>
+                    <span className="info-hint" title="Heuristic confidence score (0-100) based on AIS freshness and data completeness; this is not a statistical confidence interval.">
+                      i
+                    </span>
+                    <span className="value">
+                      {emission ? `${emission.confidence}%` : <span className="dim">N/A</span>}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Fuel assumption</span>
+                    <span className="value">
+                      {emission ? emission.fuelType : <span className="dim">N/A</span>}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <span className="label">Engine load factor</span>
+                    <span className="info-hint" title="Estimated fraction of main engine utilization derived from speed-cubed behavior and navigation status.">
+                      i
+                    </span>
+                    <span className="value">
+                      {emission ? `${(emission.loadFactor * 100).toFixed(1)}%` : <span className="dim">N/A</span>}
+                    </span>
+                  </div>
+                  <div className="detail-item full">
+                    <span className="label">Main / Aux power</span>
+                    <span className="info-hint" title="Estimated installed power ratings in kilowatts (kW): main propulsion engine and auxiliary engines.">
+                      i
+                    </span>
+                    <span className="value">
+                      {emission
+                        ? `${Math.round(emission.estimatedMainPowerKw).toLocaleString()} kW / ${Math.round(emission.estimatedAuxPowerKw).toLocaleString()} kW`
+                        : <span className="dim">N/A</span>}
+                    </span>
+                  </div>
+                  <div className="detail-item full">
+                    <span className="label">Assumptions</span>
+                    <span className="value assumptions">
+                      {emission ? emission.assumptions.join(' | ') : <span className="dim">N/A</span>}
                     </span>
                   </div>
                 </div>

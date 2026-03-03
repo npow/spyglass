@@ -1,5 +1,22 @@
+import { useState } from 'react';
 import { SHIP_COLORS, SHIP_CATEGORY_LABELS } from '../utils';
-import type { ShipCategory } from '../types';
+import type { PortZone, ShipCategory } from '../types';
+
+interface PortEmitter {
+  mmsi: number;
+  shipName: string;
+  categoryLabel: string;
+  co2TonnesPerHour: number;
+  confidence: number;
+  priorityScore: number;
+}
+
+interface PortSummary {
+  vesselCount: number;
+  specBackedCount: number;
+  totalHourlyTonnes: number;
+  topEmitters: PortEmitter[];
+}
 
 interface HUDProps {
   shipCount: number;
@@ -7,11 +24,31 @@ interface HUDProps {
   mode: 'live' | 'demo';
   messageCount: number;
   error: string | null;
+  selectedPortCode: string;
+  ports: PortZone[];
+  fleetHourlyTonnes: number;
+  portSummary: PortSummary;
+  onSelectPort: (portCode: string) => void;
   onGoLive: () => void;
   onGoDemo: () => void;
 }
 
-export function HUD({ shipCount, connected, mode, messageCount, error, onGoLive, onGoDemo }: HUDProps) {
+export function HUD({
+  shipCount,
+  connected,
+  mode,
+  messageCount,
+  error,
+  selectedPortCode,
+  ports,
+  fleetHourlyTonnes,
+  portSummary,
+  onSelectPort,
+  onGoLive,
+  onGoDemo,
+}: HUDProps) {
+  const [portOversightOpen, setPortOversightOpen] = useState(false);
+
   return (
     <div className="hud">
       {/* Stats bar */}
@@ -41,6 +78,14 @@ export function HUD({ shipCount, connected, mode, messageCount, error, onGoLive,
             Messages <span className="value">{messageCount.toLocaleString()}</span>
           </span>
         )}
+
+        <span className="stat">
+          Fleet CO2/h
+          <span className="info-hint" title="Estimated tonnes of CO2 emitted per hour across all tracked vessels.">
+            i
+          </span>
+          <span className="value">{fleetHourlyTonnes.toFixed(1)}t</span>
+        </span>
       </div>
 
       {error && (
@@ -58,6 +103,83 @@ export function HUD({ shipCount, connected, mode, messageCount, error, onGoLive,
           </span>
         ))}
       </div>
+
+      {!portOversightOpen && (
+        <button className="open-port-btn" onClick={() => setPortOversightOpen(true)}>
+          Open Port Oversight
+        </button>
+      )}
+
+      {portOversightOpen && (
+        <div className="emissions-card">
+          <div className="emissions-card-header">
+            <div>
+              <h4>Port Oversight</h4>
+              <p>Transparent vessel-level estimation</p>
+            </div>
+            <button
+              className="panel-close-btn"
+              onClick={() => setPortOversightOpen(false)}
+              aria-label="Close port oversight"
+              title="Close"
+            >
+              \u00d7
+            </button>
+          </div>
+
+            <select
+              value={selectedPortCode}
+              onChange={(event) => onSelectPort(event.target.value)}
+            >
+              {ports.map((port) => (
+                <option key={port.code} value={port.code}>
+                  {port.name}
+                </option>
+              ))}
+            </select>
+
+            <div className="emissions-summary-grid">
+              <div>
+                <span className="label">In-port vessels</span>
+                <span className="value">{portSummary.vesselCount}</span>
+              </div>
+              <div>
+                <span className="label">Spec-backed</span>
+                <span className="value">{portSummary.specBackedCount}</span>
+              </div>
+              <div>
+                <span className="label">Estimated CO2/h</span>
+                <span className="info-hint" title="Estimated tonnes of CO2 emitted per hour by vessels currently inside this selected port zone.">
+                  i
+                </span>
+                <span className="value">{portSummary.totalHourlyTonnes.toFixed(2)} t</span>
+              </div>
+            </div>
+
+            <div className="emitter-list">
+              {portSummary.topEmitters.length === 0 && (
+                <div className="emitter-empty">No vessels currently in selected zone.</div>
+              )}
+              {portSummary.topEmitters.map((ship) => (
+                <div className="emitter-item" key={ship.mmsi}>
+                  <div className="emitter-title">
+                    <span>{ship.shipName}</span>
+                    <span>{ship.co2TonnesPerHour.toFixed(2)} t/h</span>
+                  </div>
+                  <div className="emitter-meta">
+                    <span>{ship.categoryLabel}</span>
+                    <span title="Priority = CO2/h adjusted upward for lower-confidence estimates to support triage.">
+                      Priority {ship.priorityScore.toFixed(2)}
+                    </span>
+                    <span title="Heuristic data-quality score based on AIS completeness and freshness.">
+                      Confidence {ship.confidence}%
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+        </div>
+      )}
 
       {/* Mode switch */}
       {mode === 'demo' ? (

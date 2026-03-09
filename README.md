@@ -1,5 +1,7 @@
 # Spyglass
 
+[![Docs](https://img.shields.io/badge/docs-mintlify-18a34a?style=flat-square)](https://mintlify.com/npow/spyglass)
+
 Spyglass gives port and regulatory teams a clear, vessel-level view of maritime emissions.
 
 Use it to answer three operational questions fast:
